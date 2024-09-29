@@ -1,4 +1,8 @@
 Spring = {}
+Spring.__index = Spring
+Spring.__tostring = function()
+	return "Canvas"
+end
 
 function Spring.new(initial)
 	local target = initial or 0

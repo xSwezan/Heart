@@ -24,6 +24,10 @@ function Vector2:Rotate(angle)
     return Vector2.new(self.X * cos - self.Y * sin, self.X * sin + self.Y * cos)
 end
 
+function Vector2:MoveTowards(position, distance)
+	return self + (position - self):Unit() * distance
+end
+
 function Vector2:Magnitude()
 	return math.sqrt(self.X * self.X + self.Y * self.Y)
 end

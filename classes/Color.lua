@@ -1,5 +1,8 @@
 Color = {}
 Color.__index = Color
+Color.__tostring = function()
+	return "Color"
+end
 
 function Color.new(r, g, b, a)
 	local self = setmetatable({
