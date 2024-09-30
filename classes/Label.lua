@@ -1,15 +1,12 @@
 local BASE = (...):gsub("Label$", "")
 require(BASE.."Vector2")
 require(BASE.."Rect2D")
+require(BASE.."Font")
+
+local ASSETS = (...):gsub("Heart%..+", "Heart/assets/"):gsub("%.", "/")
 
 Label = {
-	TEXT_ALIGN = {
-		TOP_LEFT = Vector2.new(0, 0);
-		TOP_RIGHT = Vector2.new(1, 0);
-		CENTER = Vector2.new(0.5, 0.5);
-		BOTTOM_LEFT = Vector2.new(0, 1);
-		BOTTOM_RIGHT = Vector2.new(1, 1);
-	};
+	ALIGN = Rect2D.ALIGN;
 }
 Label.__index = Label
 Label.__tostring = function()
@@ -17,25 +14,41 @@ Label.__tostring = function()
 end
 setmetatable(Label, Rect2D)
 
+local function updateSize(self)
+	local font = love.graphics.getFont()
+	self.Size = Vector2.new(font:getWidth(self.Text), font:getBaseline())
+end
+
 function Label.new(text)
 	local self = Rect2D.new()
 	setmetatable(self, Label)
 
 	self.Text = text
 	self.Color = Color.fromRGB(255, 255, 255)
+	self.FontSize = 10
+	self.Font = Font.new(ASSETS.."Arial.ttf", self.FontSize)
+
+	updateSize(self)
 
 	return self
 end
 
 function Label:Draw()
-	self.Color:Use(function()
-		local font = love.graphics.getFont()
+	local function draw()
+		updateSize(self)
 
 		love.graphics.print(
 			self.Text,
-			self.Position.X - font:getWidth(self.Text) * self.AnchorPoint.X,
-			self.Position.Y - font:getHeight() * self.AnchorPoint.Y
+			self.Position.X - self:GetAbsoluteSize().X * self.AnchorPoint.X,
+			self.Position.Y - self:GetAbsoluteSize().Y * self.AnchorPoint.Y,
+			math.rad(self.Rotation)
 		)
+	end
+
+	self.Color:Use(function()
+		self.Font:UseWithSize(self.FontSize, function()
+			draw()
+		end)
 		-- love.graphics.print(
 		-- 	self.Texture,
 		-- 	self.Position.X,

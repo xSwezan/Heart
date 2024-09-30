@@ -3,7 +3,9 @@ require(BASE.."Vector2")
 require(BASE.."Rect2D")
 require(BASE.."Color")
 
-Sprite = {}
+Sprite = {
+	ALIGN = Rect2D.ALIGN;
+}
 Sprite.__index = Sprite
 Sprite.__tostring = function()
 	return "Sprite"

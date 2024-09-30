@@ -1,9 +1,15 @@
 Rect2D = {
 	ALIGN = {
 		TOP_LEFT = Vector2.new(0, 0);
+		TOP_CENTER = Vector2.new(0.5, 0);
 		TOP_RIGHT = Vector2.new(1, 0);
+
+		MIDDLE_LEFT = Vector2.new(0, 0.5);
 		CENTER = Vector2.new(0.5, 0.5);
+		MIDDLE_RIGHT = Vector2.new(1, 0.5);
+
 		BOTTOM_LEFT = Vector2.new(0, 1);
+		BOTTOM_CENTER = Vector2.new(0.5, 1);
 		BOTTOM_RIGHT = Vector2.new(1, 1);
 	};
 }
@@ -15,7 +21,7 @@ end
 function Rect2D.new()
 	local self = setmetatable({
 		Scale = Vector2.new(1, 1);
-		Size = Vector2.new(0, 0);
+		Size = Vector2.new(100, 100);
 		Position = Vector2.new(0, 0);
 		Rotation = 0;
 
@@ -25,18 +31,22 @@ function Rect2D.new()
 	return self
 end
 
+-- Rotates the Rect2D to point at a position
 function Rect2D:LookAt(at, offsetDegrees)
 	self.Rotation = math.deg(math.atan2(at.Y - self.Position.Y, at.X - self.Position.X)) + 90 + (offsetDegrees or 0)
 end
 
+-- Returns the center position of the Rect2D
 function Rect2D:GetCenter()
 	return self.Position - (self.Size * self.Scale * (self.AnchorPoint - 0.5)):Rotate(math.rad(self.Rotation))
 end
 
+-- Returns the size in pixels
 function Rect2D:GetAbsoluteSize()
 	return self.Size * self.Scale
 end
 
+-- Returns a table of the four corners as Vector2s
 function Rect2D:GetCorners()
     local halfWidth = (self.Size.X * self.Scale.X) / 2
     local halfHeight = (self.Size.Y * self.Scale.Y) / 2
@@ -62,7 +72,8 @@ function Rect2D:GetCorners()
     return rotatedCorners
 end
 
--- TODO: Make a fast version of this that calculates without Rotation if rotation on both Rect2Ds are 0
+-- TODO: Make a fast version of this that calculates without rotation if Rotation on both Rect2Ds are 0
+-- Checks if this Rect2D overlaps with another Rect2D
 function Rect2D:Overlaps(other)
 	-- if (self.Rotation == 0) and (other.Rotation == 0) then
 	-- 	return Rect2D:OverlapsFast()
@@ -86,6 +97,8 @@ function Rect2D:Overlaps(other)
     return false
 end
 
+-- Checks  if  a position (Vector2) is inside
+-- this Rect2D
 function Rect2D:PointOverlaps(point)
     local corners = self:GetCorners()
 
@@ -99,4 +112,21 @@ function Rect2D:PointOverlaps(point)
     local b4 = sign(point, corners[4], corners[1]) < 0.0
 
     return (b1 == b2) and (b2 == b3) and (b3 == b4)
+end
+
+-- Utility  function that draws the bounds of
+-- the Rect2D
+function Rect2D:DebugDrawBounds()
+	love.graphics.push()
+	love.graphics.setColor(1, 0, 1, 0.5)
+	love.graphics.rotate(math.rad(self.Rotation))
+	love.graphics.rectangle(
+		"fill",
+		self.Position.X - self:GetAbsoluteSize().X * self.AnchorPoint.X,
+		self.Position.Y - self:GetAbsoluteSize().Y * self.AnchorPoint.Y,
+		self:GetAbsoluteSize().X,
+		self:GetAbsoluteSize().Y
+	)
+	love.graphics.setColor(1, 1, 1)
+	love.graphics.pop()
 end

@@ -2,12 +2,12 @@ Task = {}
 local tasks = {}
 local nextTaskId = 0
 
-local function addTask(callback, delay)
+local function addTask(callback, delay, args)
     nextTaskId = nextTaskId + 1
 
     table.insert(tasks, {
         id = nextTaskId,
-        co = coroutine.create(callback),
+        co = coroutine.create(function() callback(unpack(args)) end),
         delay = delay or 0,
         startTime = love.timer.getTime(),
         canceled = false
@@ -16,12 +16,12 @@ local function addTask(callback, delay)
     return nextTaskId
 end
 
-function Task.spawn(callback)
-    return addTask(callback, 0)
+function Task.spawn(callback, ...)
+    return addTask(callback, 0, {...})
 end
 
-function Task.delay(delay, callback)
-    return addTask(callback, delay)
+function Task.delay(delay, callback, ...)
+    return addTask(callback, delay, {...})
 end
 
 function Task.wait(seconds)
