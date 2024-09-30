@@ -38,7 +38,8 @@ end
 
 -- Returns the center position of the Rect2D
 function Rect2D:GetCenter()
-	return self.Position - (self.Size * self.Scale * (self.AnchorPoint - 0.5)):Rotate(math.rad(self.Rotation))
+    return self.Position - (self.Size * self.Scale * (self.AnchorPoint - 0.5)):Rotate(math.rad(self.Rotation))
+    -- return self.Position + (self.Size * (1 - self.AnchorPoint) * self.Scale - (self.Size * self.Scale / 2)):Rotate(math.rad(self.Rotation))
 end
 
 -- Returns the size in pixels
@@ -119,14 +120,69 @@ end
 function Rect2D:DebugDrawBounds()
 	love.graphics.push()
 	love.graphics.setColor(1, 0, 1, 0.5)
+	love.graphics.translate(
+		self.Position.X,
+		self.Position.Y
+	)
+
 	love.graphics.rotate(math.rad(self.Rotation))
 	love.graphics.rectangle(
 		"fill",
-		self.Position.X - self:GetAbsoluteSize().X * self.AnchorPoint.X,
-		self.Position.Y - self:GetAbsoluteSize().Y * self.AnchorPoint.Y,
+		-self:GetAbsoluteSize().X * self.AnchorPoint.X,
+		-self:GetAbsoluteSize().Y * self.AnchorPoint.Y,
 		self:GetAbsoluteSize().X,
 		self:GetAbsoluteSize().Y
 	)
 	love.graphics.setColor(1, 1, 1)
 	love.graphics.pop()
+end
+
+-- Utility function that draws the AnchorPoint  of
+-- the Rect2D.
+function Rect2D:DebugDrawAnchorPoint()
+	love.graphics.push()
+	love.graphics.setColor(1, 1, 0, 1)
+	love.graphics.circle(
+		"fill",
+		self.Position.X,
+		self.Position.Y,
+		3
+	)
+	love.graphics.setColor(1, 1, 1)
+	love.graphics.pop()
+end
+
+function Rect2D:DebugDrawCorners()
+	love.graphics.push()
+	love.graphics.setColor(1, 0, 1, 1)
+	for _, corner in pairs(self:GetCorners()) do
+		love.graphics.circle(
+			"fill",
+			corner.X,
+			corner.Y,
+			3
+		)
+	end
+	love.graphics.setColor(1, 1, 1)
+	love.graphics.pop()
+end
+
+function Rect2D:DebugDrawCenter()
+	love.graphics.push()
+	love.graphics.setColor(1, 1, 1, 1)
+	love.graphics.circle(
+		"fill",
+		self:GetCenter().X,
+		self:GetCenter().Y,
+		3
+	)
+	love.graphics.setColor(1, 1, 1)
+	love.graphics.pop()
+end
+
+function Rect2D:DebugDrawAll()
+	self:DebugDrawBounds()
+	self:DebugDrawCorners()
+	self:DebugDrawCenter()
+	self:DebugDrawAnchorPoint()
 end

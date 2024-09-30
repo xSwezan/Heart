@@ -1,4 +1,5 @@
 Frame = {
+	ALIGN = Rect2D.ALIGN;
 	OUTLINE_JOIN = {
 		NONE = "none";
 		MITER = "miter";
@@ -27,11 +28,16 @@ end
 
 function Frame:Draw()
 	self.Color:Use(function()
+		love.graphics.push()
+		love.graphics.translate(
+			self.Position.X,
+			self.Position.Y
+		)
 		love.graphics.rotate(math.rad(self.Rotation))
 		love.graphics.rectangle(
 			"fill",
-			self.Position.X - self:GetAbsoluteSize().X * self.AnchorPoint.X,
-			self.Position.Y - self:GetAbsoluteSize().Y * self.AnchorPoint.Y,
+			-self:GetAbsoluteSize().X * self.AnchorPoint.X,
+			-self:GetAbsoluteSize().Y * self.AnchorPoint.Y,
 			self:GetAbsoluteSize().X,
 			self:GetAbsoluteSize().Y,
 			self.CornerRadius,
@@ -44,8 +50,8 @@ function Frame:Draw()
 				love.graphics.setLineJoin(self.OutlineJoin)
 				love.graphics.rectangle(
 					"line",
-					self.Position.X - self:GetAbsoluteSize().X * self.AnchorPoint.X,
-					self.Position.Y - self:GetAbsoluteSize().Y * self.AnchorPoint.Y,
+					-self:GetAbsoluteSize().X * self.AnchorPoint.X,
+					-self:GetAbsoluteSize().Y * self.AnchorPoint.Y,
 					self:GetAbsoluteSize().X,
 					self:GetAbsoluteSize().Y,
 					self.CornerRadius,
@@ -53,5 +59,6 @@ function Frame:Draw()
 				)
 			end)
 		end
+		love.graphics.pop()
 	end)
 end

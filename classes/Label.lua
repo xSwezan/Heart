@@ -37,12 +37,21 @@ function Label:Draw()
 	local function draw()
 		updateSize(self)
 
-		love.graphics.print(
-			self.Text,
-			self.Position.X - self:GetAbsoluteSize().X * self.AnchorPoint.X,
-			self.Position.Y - self:GetAbsoluteSize().Y * self.AnchorPoint.Y,
-			math.rad(self.Rotation)
+		love.graphics.push()
+		love.graphics.translate(
+			self.Position.X,
+			self.Position.Y
 		)
+		love.graphics.scale(self.Scale.X, self.Scale.Y)
+		love.graphics.rotate(math.rad(self.Rotation))
+		love.graphics.printf(
+			self.Text,
+			-self:GetAbsoluteSize().X * self.AnchorPoint.X,
+			-self:GetAbsoluteSize().Y * self.AnchorPoint.Y,
+			self.Size.X,
+			"center"
+		)
+		love.graphics.pop()
 	end
 
 	self.Color:Use(function()
