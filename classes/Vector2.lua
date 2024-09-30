@@ -24,6 +24,21 @@ function Vector2:Rotate(angle)
     return Vector2.new(self.X * cos - self.Y * sin, self.X * sin + self.Y * cos)
 end
 
+function Vector2:Dot(other)
+    return self.X * other.X + self.Y * other.Y
+end
+
+function Vector2:Reflect(normal)
+    return self - normal * 2 * self:Dot(normal)
+end
+
+function Vector2:Clamp(min, max)
+	return Vector2.new(
+		math.min(math.max(self.X, min.X), max.X),
+		math.min(math.max(self.Y, min.Y), max.Y)
+	)
+end
+
 function Vector2:MoveTowards(position, distance)
 	return self + (position - self):Unit() * distance
 end

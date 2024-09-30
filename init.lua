@@ -18,6 +18,7 @@ require(BASE.."classes.Canvas")
 require(BASE.."classes.Sprite")
 require(BASE.."classes.Spring")
 require(BASE.."classes.Shader")
+require(BASE.."classes.Label")
 require(BASE.."classes.Sound")
 require(BASE.."classes.Color")
 require(BASE.."classes.Task")
@@ -27,6 +28,7 @@ Canvas = Canvas
 Sprite = Sprite
 Spring = Spring
 Shader = Shader
+Label = Label
 Sound = Sound
 Color = Color
 Task = Task

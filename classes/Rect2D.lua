@@ -1,4 +1,12 @@
-Rect2D = {}
+Rect2D = {
+	ALIGN = {
+		TOP_LEFT = Vector2.new(0, 0);
+		TOP_RIGHT = Vector2.new(1, 0);
+		CENTER = Vector2.new(0.5, 0.5);
+		BOTTOM_LEFT = Vector2.new(0, 1);
+		BOTTOM_RIGHT = Vector2.new(1, 1);
+	};
+}
 Rect2D.__index = Rect2D
 Rect2D.__tostring = function()
 	return "Rect2D"
@@ -11,7 +19,7 @@ function Rect2D.new()
 		Position = Vector2.new(0, 0);
 		Rotation = 0;
 
-		AnchorPoint = Sprite.ANCHOR_POINT.CENTER;
+		AnchorPoint = Rect2D.ALIGN.CENTER;
 	}, Rect2D)
 
 	return self
@@ -23,6 +31,10 @@ end
 
 function Rect2D:GetCenter()
 	return self.Position - (self.Size * self.Scale * (self.AnchorPoint - 0.5)):Rotate(math.rad(self.Rotation))
+end
+
+function Rect2D:GetAbsoluteSize()
+	return self.Size * self.Scale
 end
 
 function Rect2D:GetCorners()
@@ -50,9 +62,14 @@ function Rect2D:GetCorners()
     return rotatedCorners
 end
 
+-- TODO: Make a fast version of this that calculates without Rotation if rotation on both Rect2Ds are 0
 function Rect2D:Overlaps(other)
+	-- if (self.Rotation == 0) and (other.Rotation == 0) then
+	-- 	return Rect2D:OverlapsFast()
+	-- end
+
     local cornersA = self:GetCorners()
-    local cornersB = other:getCorners()
+    local cornersB = other:GetCorners()
 
     for _, corner in ipairs(cornersA) do
         if (other:PointOverlaps(corner)) then
