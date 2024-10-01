@@ -38,18 +38,17 @@ function Label:Draw()
 		updateSize(self)
 
 		love.graphics.push()
+		love.graphics.origin()
 		love.graphics.translate(
 			self.Position.X,
 			self.Position.Y
 		)
 		love.graphics.scale(self.Scale.X, self.Scale.Y)
 		love.graphics.rotate(math.rad(self.Rotation))
-		love.graphics.printf(
+		love.graphics.print(
 			self.Text,
-			-self:GetAbsoluteSize().X * self.AnchorPoint.X,
-			-self:GetAbsoluteSize().Y * self.AnchorPoint.Y,
-			self.Size.X,
-			"center"
+			-self.Size.X * self.AnchorPoint.X,
+			-self.Size.Y * self.AnchorPoint.Y
 		)
 		love.graphics.pop()
 	end
@@ -58,15 +57,5 @@ function Label:Draw()
 		self.Font:UseWithSize(self.FontSize, function()
 			draw()
 		end)
-		-- love.graphics.print(
-		-- 	self.Texture,
-		-- 	self.Position.X,
-		-- 	self.Position.Y,
-		-- 	math.rad(self.Rotation),
-		-- 	self:GetAbsoluteSize().X / self.Texture:getWidth(),
-		-- 	self:GetAbsoluteSize().Y / self.Texture:getHeight(),
-		-- 	self.Texture:getWidth() * self.AnchorPoint.X,
-		-- 	self.Texture:getHeight() * self.AnchorPoint.Y
-		-- )
 	end)
 end
