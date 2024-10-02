@@ -17,7 +17,27 @@ local function addTask(callback, delay, args)
 end
 
 function Task.spawn(callback, ...)
-    return addTask(callback, 0, {...})
+    local args = {...}
+    local co = coroutine.create(function() callback(unpack(args)) end)
+
+    local success, err = coroutine.resume(co)
+    if not (success) then
+        print("Error in task: " .. err)
+    end
+
+    if (coroutine.status(co) ~= "dead") then
+        nextTaskId = nextTaskId + 1
+        table.insert(tasks, {
+            id = nextTaskId,
+            co = co,
+            delay = 0,
+            startTime = love.timer.getTime(),
+            canceled = false
+        })
+        return nextTaskId
+    end
+
+    return nil
 end
 
 function Task.delay(delay, callback, ...)
