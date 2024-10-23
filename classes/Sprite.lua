@@ -1,8 +1,13 @@
+---@meta
+
 local BASE = (...):gsub("Sprite$", "")
 require(BASE.."Vector2")
 require(BASE.."Rect2D")
 require(BASE.."Color")
 
+---@class Sprite: Rect2D
+---@field Texture love.Texture
+---@field Color Color
 Sprite = {
 	ALIGN = Rect2D.ALIGN;
 }
@@ -12,20 +17,24 @@ Sprite.__tostring = function()
 end
 setmetatable(Sprite, Rect2D)
 
-function Sprite.new(path)
-	local self = Rect2D.new()
+---@param filename string
+---@return Sprite
+---@nodiscard
+function Sprite.new(filename)
+	local self = Rect2D.new() --[[@as Sprite]]
 	setmetatable(self, Sprite)
 
 	self.Texture = nil
-	self.Color = Color.new(1, 1, 1)
+	self.Color = Color.new(1, 1, 1, 1)
 
-	self:SetTexture(path)
+	self:SetTexture(filename)
 
 	return self
 end
 
-function Sprite:SetTexture(path)
-	local Texture = love.graphics.newImage(path);
+---@param filename string
+function Sprite:SetTexture(filename)
+	local Texture = love.graphics.newImage(filename)
 	self.Texture = Texture
 	self.Size = Vector2.new(Texture:getWidth(), Texture:getHeight())
 end

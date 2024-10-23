@@ -1,9 +1,23 @@
+---@meta
+
+---@alias SpringType number|Vector2
+
+---@class Spring
+---@field Position SpringType
+---@field Velocity SpringType
+---@field Target SpringType
+---@field Damper number
+---@field Speed number
+---@field Clock function
 Spring = {}
 Spring.__index = Spring
 Spring.__tostring = function()
-	return "Canvas"
+	return "Spring"
 end
 
+---@param initial SpringType
+---@return Spring
+---@nodiscard
 function Spring.new(initial)
 	local target = initial or 0
 
@@ -18,10 +32,12 @@ function Spring.new(initial)
 	}, Spring)
 end
 
+---@param velocity number | Vector2
 function Spring:Impulse(velocity)
 	self.Velocity = self.Velocity + velocity
 end
 
+---@param delta number
 function Spring:TimeSkip(delta)
 	local now = self._clock()
 	local position, velocity = self:_positionVelocity(now + delta)
@@ -30,6 +46,7 @@ function Spring:TimeSkip(delta)
 	self._time = now
 end
 
+---@private
 function Spring:__index(index)
 	if Spring[index] then
 		return Spring[index]
@@ -52,6 +69,7 @@ function Spring:__index(index)
 	end
 end
 
+---@private
 function Spring:__newindex(index, value)
 	local now = self._clock()
 
@@ -94,6 +112,7 @@ function Spring:__newindex(index, value)
 	end
 end
 
+---@private
 function Spring:_positionVelocity(now)
 	local p0 = self._position
 	local v0 = self._velocity

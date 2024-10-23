@@ -1,9 +1,22 @@
+---@meta
+
+---@class Color
+---@field R integer Red (0-255)
+---@field G integer Green (0-255)
+---@field B integer Blue (0-255)
+---@field A integer Alpha (0-255)
 Color = {}
 Color.__index = Color
 Color.__tostring = function()
 	return "Color"
 end
 
+---@param r number Red (0-1)
+---@param g number Green (0-1)
+---@param b number Blue (0-1)
+---@param a number Alpha (0-1)
+---@return Color
+---@nodiscard
 function Color.new(r, g, b, a)
 	local self = setmetatable({
 		R = r;
@@ -15,14 +28,27 @@ function Color.new(r, g, b, a)
 	return self
 end
 
+---@param r integer the Red value (0-255)
+---@param g integer Green (0-255)
+---@param b integer Blue (0-255)
+---@return Color
+---@nodiscard
 function Color.fromRGB(r, g, b)
-	return Color.new(r / 255, g / 255, b / 255)
+	return Color.new(r / 255, g / 255, b / 255, 255)
 end
 
+---@param r integer Red (0-255)
+---@param g integer Green (0-255)
+---@param b integer Blue (0-255)
+---@param a integer Alpha (0-255)
+---@return Color
+---@nodiscard
 function Color.fromRGBA(r, g, b, a)
 	return Color.new(r / 255, g / 255, b / 255, a / 255)
 end
 
+-- Uses the color for draw operations within the callback function.
+---@param callback fun()
 function Color:Use(callback)
 	local lR, lG, lB, lA = love.graphics.getColor()
 	love.graphics.setColor(self.R, self.G, self.B, self.A)

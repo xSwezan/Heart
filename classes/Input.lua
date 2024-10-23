@@ -1,4 +1,5 @@
 Input = {
+	---@enum KeyCode
 	KEYCODE = {
 		RETURN = "return",
 		ESCAPE = "escape",
@@ -134,6 +135,7 @@ Input = {
 		KP_COMMA = "kp,",
 		KP_EQUALS = "kp=",
 	};
+	---@enum MouseButton
 	MOUSE = {
 		LEFT = 1;
 		RIGHT = 2;
@@ -156,8 +158,11 @@ local connections = {
 -- Passed  callback  gets  called when any of
 -- the keycodes in  the  provided  table  get
 -- pressed. Returns a disconnect function.
-function Input.InputDown(tableKeyCodes, callback)
-	for _, keyCode in pairs(tableKeyCodes) do
+---@param keyCodes KeyCode[]
+---@param callback fun()
+---@return fun()
+function Input.InputDown(keyCodes, callback)
+	for _, keyCode in pairs(keyCodes) do
 		connections.inputDown[keyCode] = connections.inputDown[keyCode] or {}
 		table.insert(connections.inputDown[keyCode], callback)
 
@@ -165,7 +170,7 @@ function Input.InputDown(tableKeyCodes, callback)
 	end
 
 	return function()
-		for _, keyCode in pairs(tableKeyCodes) do
+		for _, keyCode in pairs(keyCodes) do
 			table.remove(
 				connections.inputDown[keyCode],
 				table.find(connections.inputDown[keyCode], callback)
@@ -177,8 +182,11 @@ end
 -- Passed  callback  gets  called when any of
 -- the keycodes in  the  provided  table  get
 -- released. Returns a disconnect function.
-function Input.InputUp(tableKeyCodes, callback)
-	for _, keyCode in pairs(tableKeyCodes) do
+---@param keyCodes KeyCode[]
+---@param callback fun()
+---@return fun()
+function Input.InputUp(keyCodes, callback)
+	for _, keyCode in pairs(keyCodes) do
 		connections.inputUp[keyCode] = connections.inputUp[keyCode] or {}
 		table.insert(connections.inputUp[keyCode], callback)
 
@@ -186,7 +194,7 @@ function Input.InputUp(tableKeyCodes, callback)
 	end
 
 	return function()
-		for _, keyCode in pairs(tableKeyCodes) do
+		for _, keyCode in pairs(keyCodes) do
 			table.remove(
 				connections.inputUp[keyCode],
 				table.find(connections.inputUp[keyCode], callback)
@@ -199,6 +207,9 @@ end
 -- user presses the passed mouseButton,  with
 -- the parameters: (clickPosition). Returns a
 -- disconnect function.
+---@param mouseButton MouseButton
+---@param callback fun(clickPosition: Vector2)
+---@return fun()
 function Input.MouseDown(mouseButton, callback)
 	connections.mouseDown[mouseButton] = connections.mouseDown[mouseButton] or {}
 	table.insert(connections.mouseDown[mouseButton], callback)
@@ -216,6 +227,9 @@ end
 -- user releases the passed mouseButton, with
 -- the parameters: (clickPosition). Returns a
 -- disconnect function.
+---@param mouseButton MouseButton
+---@param callback fun(clickPosition: Vector2)
+---@return fun()
 function Input.MouseUp(mouseButton, callback)
 	connections.mouseUp[mouseButton] = connections.mouseUp[mouseButton] or {}
 	table.insert(connections.mouseUp[mouseButton], callback)
@@ -232,6 +246,9 @@ end
 -- user double clicks the passed mouseButton,
 -- with   the   parameters:  (clickPosition).
 -- Returns a disconnect function.
+---@param mouseButton MouseButton
+---@param callback fun(clickPosition: Vector2)
+---@return fun()
 function Input.MouseDoubleClick(mouseButton, callback)
 	connections.mouseDoubleClick[mouseButton] = connections.mouseDoubleClick[mouseButton] or {}
 	table.insert(connections.mouseDoubleClick[mouseButton], callback)
@@ -248,6 +265,8 @@ end
 -- mouse moves, with the parameters:  (newPo-
 -- sition,       delta).       Returns      a
 -- disconnect function.
+---@param callback fun(position: Vector2, delta: Vector2)
+---@return fun()
 function Input.MouseMove(callback)
 	table.insert(connections.mouseMove, callback)
 
@@ -259,25 +278,42 @@ function Input.MouseMove(callback)
 	end
 end
 
+-- Returns true if the passed KeyCode is down.
+---@param keyCode KeyCode
+---@return boolean
 function Input.IsDown(keyCode)
-	return (keyCodesDown[keyCode] == true) or (love.keyboard.isDown(keyCode))
+	return (keyCodesDown[keyCode] == true) or (love.keyboard.isDown(keyCode --[[@as love.KeyConstant]]))
 end
 
+-- Returns true if any of the passed KeyCodes are down.
+---@param keyCodes KeyCode[]
+---@return boolean
 function Input.IsAnyDown(keyCodes)
 	for _, keyCode in pairs(keyCodes) do
-		if (Input.IsDown(keyCode)) then return true end
+		if (Input.IsDown(keyCode)) then
+			return true
+		end
 	end
+
+	return false
 end
 
+-- Returns true if all of the passed KeyCodes are down.
+---@param keyCodes KeyCode[]
+---@return boolean
 function Input.AreAllDown(keyCodes)
 	for _, keyCode in pairs(keyCodes) do
-		if not (Input.IsDown(keyCode)) then return false end
+		if not (Input.IsDown(keyCode)) then
+			return false
+		end
 	end
 
 	return true
 end
 
-function Input.update(dt)
+---@param dt number DeltaTime
+---@private
+function Input._update(dt)
 	for keyCode in pairs(registeredKeycodes) do
 		if (love.keyboard.isDown(keyCode)) then
 			if not (keyCodesDown[keyCode]) and (connections.inputDown[keyCode]) then

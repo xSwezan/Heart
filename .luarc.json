@@ -1,5 +1,13 @@
 {
     "diagnostics.globals": [
         "love"
-    ]
+    ],
+    "workspace.library": [
+        "C:/Users/Eddie/AppData/Roaming/Code/User/globalStorage/sumneko.lua/addonManager/addons/love2d/module/library"
+    ],
+    "runtime.version": "LuaJIT",
+    "runtime.special": {
+        "love.filesystem.load": "loadfile"
+    },
+    "workspace.checkThirdParty": false
 }

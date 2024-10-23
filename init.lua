@@ -47,6 +47,6 @@ Task = Task
 Heart = {}
 
 function Heart:update(dt)
-	Task.update(dt)
-	Input.update(dt)
+	Task._update(dt)
+	Input._update(dt)
 end
