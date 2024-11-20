@@ -37,3 +37,13 @@ end
 function math.map(x, inmin, inmax, outmin, outmax)
 	return outmin + (x - inmin) * (outmax - outmin) / (inmax - inmin)
 end
+
+local function roll(t, _a, _b, _c)
+	return not t and (tonumber(_c) and _c>_b and _a or _c) or (not _c and _a and math.random(_a) or roll(nil, _b, _a, roll(t, _a and _a + _c or 0, next(t, _b))))
+end
+--- Performs a weighted random selection from a dictionary of weights.
+--- @param t table A dictionary of keys and their corresponding weights.
+--- @return any A randomly selected key based on the weights.
+function math.weightedrandom(t)
+    return roll(t)
+end
