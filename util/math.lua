@@ -7,6 +7,17 @@ function math.lerp(a, b, t)
 	return a + (b - a) * t
 end
 
+--- Calculates the inverse linear interpolation of a value within a range.
+--- Given a range [a, b], it returns the normalized position of `value` in the range,
+--- such that `a` maps to 0 and `b` maps to 1.
+---@param a number The start of the range.
+---@param b number The end of the range.
+---@param v number the value to normalize within the range.
+---@return number The normalized position (0 to 1) of `v` within [a, b].
+function math.invlerp(a, b, v)
+	return (v - a) / (b - a)
+end
+
 --- Returns a number between `min` and `max`, inclusive.
 ---@param x number
 ---@param min number
