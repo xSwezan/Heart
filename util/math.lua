@@ -15,3 +15,14 @@ end
 function math.clamp(x, min, max)
 	return math.min(math.max(x, min), max)
 end
+
+--- Maps a number from one range to another.
+---@param x number
+---@param inmin number
+---@param inmax number
+---@param outmin number
+---@param outmax number
+---@return number
+function math.map(x, inmin, inmax, outmin, outmax)
+	return outmin + (x - inmin) * (outmax - outmin) / (inmax - inmin)
+end
