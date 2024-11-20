@@ -10,6 +10,7 @@ end
 ---@param haystack table
 ---@param needle any
 ---@param init number?
+---@nodiscard
 function table.find(haystack, needle, init)
 	for i = (init or 1), #haystack do
 		if (haystack[i] == needle) then
