@@ -37,7 +37,7 @@ function Frame.new()
 	return self
 end
 
--- Draws the Frame to the screen.
+--- Draws the Frame to the screen.
 function Frame:Draw()
 	self.Color:Use(function()
 		love.graphics.push()

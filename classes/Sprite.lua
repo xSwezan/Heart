@@ -39,6 +39,7 @@ function Sprite:SetTexture(filename)
 	self.Size = Vector2.new(Texture:getWidth(), Texture:getHeight())
 end
 
+--- Draws the Sprite to the screen.
 function Sprite:Draw()
 	self.Color:Use(function()
 		love.graphics.draw(

@@ -32,9 +32,9 @@ function Font.new(filename, size)
 	return self
 end
 
--- Returns a Love2D font with the given  size. If
--- size is nil, the size used when  the  font  was
--- created will be used.
+--- Returns a Love2D font with the given  size. If
+--- size is nil, the size used when  the  font  was
+--- created will be used.
 ---@param size? number
 ---@return love.Font
 ---@nodiscard
@@ -53,9 +53,9 @@ function Font:GetFont(size)
 	return newFont
 end
 
--- Uses font (with the size the Font  was  created
--- with) while inside callback and  sets  back  to
--- the previous font after.
+--- Uses font (with the size the Font  was  created
+--- with) while inside callback and  sets  back  to
+--- the previous font after.
 ---@param callback fun()
 function Font:Use(callback)
 	local lastFont = love.graphics.getFont()
@@ -64,9 +64,9 @@ function Font:Use(callback)
 	love.graphics.setFont(lastFont)
 end
 
--- Uses  font  (with  custom  size)  while  inside
--- callback and sets back  to  the  previous  font
--- after.
+--- Uses  font  (with  custom  size)  while  inside
+--- callback and sets back  to  the  previous  font
+--- after.
 ---@param size number
 ---@param callback fun()
 function Font:UseWithSize(size, callback)
@@ -76,7 +76,7 @@ function Font:UseWithSize(size, callback)
 	love.graphics.setFont(lastFont)
 end
 
--- Sets Love2D's current font.
+--- Sets Love2D's current font.
 function Font:Set()
 	love.graphics.setFont(self:GetFont())
 end

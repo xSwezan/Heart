@@ -22,7 +22,7 @@ function Canvas.new(width, height)
 	return self
 end
 
--- Sets Love2D's current Canvas to this one, making all draw calls inside the callback be rendered in the Canvas.
+--- Sets Love2D's current Canvas to this one, making all draw calls inside the callback be rendered in the Canvas.
 ---@param callback fun()
 function Canvas:Use(callback)
 	love.graphics.setCanvas(self.Canvas)
@@ -30,12 +30,12 @@ function Canvas:Use(callback)
 	love.graphics.setCanvas()
 end
 
--- Draws the Canvas to the screen.
+--- Draws the Canvas to the screen.
 function Canvas:Draw()
 	love.graphics.draw(self.Canvas)
 end
 
--- Clears the Canvas, using the ClearColor.
+--- Clears the Canvas, using the ClearColor.
 function Canvas:Clear()
 	love.graphics.clear(self.ClearColor.R, self.ClearColor.G, self.ClearColor.B, self.ClearColor.A)
 end

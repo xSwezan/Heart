@@ -47,7 +47,7 @@ function Color.fromRGBA(r, g, b, a)
 	return Color.new(r / 255, g / 255, b / 255, a / 255)
 end
 
--- Uses the color for draw operations within the callback function.
+--- Uses the color for draw operations within the callback function.
 ---@param callback fun()
 function Color:Use(callback)
 	local lR, lG, lB, lA = love.graphics.getColor()

@@ -40,28 +40,28 @@ function Rect2D.new()
 	return self
 end
 
--- Rotates the Rect2D to point at a position.
+--- Rotates the Rect2D to point at a position.
 ---@param at Vector2
 ---@param offsetDegrees? number
 function Rect2D:LookAt(at, offsetDegrees)
 	self.Rotation = math.deg(math.atan2(at.Y - self.Position.Y, at.X - self.Position.X)) + 90 + (offsetDegrees or 0)
 end
 
--- Returns the center position of the Rect2D.
+--- Returns the center position of the Rect2D.
 ---@return Vector2
 ---@nodiscard
 function Rect2D:GetCenter()
     return self.Position - (self.Size * self.Scale * (self.AnchorPoint - 0.5)):Rotate(math.rad(self.Rotation))
 end
 
--- Returns the size in pixels.
+--- Returns the size in pixels.
 ---@return Vector2
 ---@nodiscard
 function Rect2D:GetAbsoluteSize()
 	return self.Size * self.Scale
 end
 
--- Returns a table of the four corners as Vector2s.
+--- Returns a table of the four corners as Vector2s.
 ---@return Vector2[]
 ---@nodiscard
 function Rect2D:GetCorners()
@@ -90,7 +90,7 @@ function Rect2D:GetCorners()
 end
 
 -- TODO: Make a fast version of this that calculates without rotation if Rotation on both Rect2Ds are 0
--- Checks if this Rect2D overlaps with another Rect2D.
+--- Checks if this Rect2D overlaps with another Rect2D.
 ---@param other Rect2D
 ---@return boolean
 ---@nodiscard
@@ -117,7 +117,7 @@ function Rect2D:Overlaps(other)
     return false
 end
 
--- Checks if a point is inside Rect2D.
+--- Checks if a point is inside Rect2D.
 ---@param point Vector2
 ---@return boolean
 ---@nodiscard
@@ -140,7 +140,7 @@ end
 --> Debug Methods <--
 -->---------------<--
 
--- Utility function that draws the bounds of the Rect2D.
+--- Utility function that draws the bounds of the Rect2D.
 function Rect2D:DebugDrawBounds()
 	love.graphics.push()
 	love.graphics.setColor(1, 0, 1, 0.5)
@@ -161,7 +161,7 @@ function Rect2D:DebugDrawBounds()
 	love.graphics.pop()
 end
 
--- Utility function that draws the AnchorPoint of the Rect2D.
+--- Utility function that draws the AnchorPoint of the Rect2D.
 function Rect2D:DebugDrawAnchorPoint()
 	love.graphics.push()
 	love.graphics.setColor(1, 1, 0, 1)
@@ -175,7 +175,7 @@ function Rect2D:DebugDrawAnchorPoint()
 	love.graphics.pop()
 end
 
--- Utility function that draws the corners of the Rect2D.
+--- Utility function that draws the corners of the Rect2D.
 function Rect2D:DebugDrawCorners()
 	love.graphics.push()
 	love.graphics.setColor(1, 0, 1, 1)
@@ -191,7 +191,7 @@ function Rect2D:DebugDrawCorners()
 	love.graphics.pop()
 end
 
--- Utility function that draws the center of the Rect2D.
+--- Utility function that draws the center of the Rect2D.
 function Rect2D:DebugDrawCenter()
 	love.graphics.push()
 	love.graphics.setColor(1, 1, 1, 1)
@@ -205,7 +205,7 @@ function Rect2D:DebugDrawCenter()
 	love.graphics.pop()
 end
 
--- Utility function calls all debug draw methods.
+--- Utility function calls all debug draw methods.
 function Rect2D:DebugDrawAll()
 	self:DebugDrawBounds()
 	self:DebugDrawCorners()

@@ -44,7 +44,7 @@ function Label.new(text)
 	return self
 end
 
--- Draws the Label to the screen.
+--- Draws the Label to the screen.
 function Label:Draw()
 	local function draw()
 		updateSize(self)

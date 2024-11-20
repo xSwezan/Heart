@@ -19,7 +19,7 @@ function Shader.new(code)
 	return self
 end
 
--- Sets the current shader that Love2D uses while inside the callback.
+--- Sets the current shader that Love2D uses while inside the callback.
 ---@param callback fun()
 function Shader:Use(callback)
 	love.graphics.setShader(self.Shader)
@@ -27,7 +27,7 @@ function Shader:Use(callback)
 	love.graphics.setShader()
 end
 
--- Sends a value as a uniform to the shader.
+--- Sends a value as a uniform to the shader.
 ---@param name string
 ---@param value any
 function Shader:Send(name, value)

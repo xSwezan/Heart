@@ -32,23 +32,23 @@ end
 --> Methods <--
 -->---------<--
 
--- Plays the Sound from the start.
+--- Plays the Sound from the start.
 function Sound:Play()
 	self.Source:stop()
 	self.Source:play()
 end
 
--- Stops the Sound from playing.
+--- Stops the Sound from playing.
 function Sound:Stop()
 	self.Source:stop()
 end
 
--- Pauses the Sound.
+--- Pauses the Sound.
 function Sound:Pause()
 	self.Source:pause()
 end
 
--- Resumes the paused Sound.
+--- Resumes the paused Sound.
 function Sound:Resume()
 	self.Source:play()
 end

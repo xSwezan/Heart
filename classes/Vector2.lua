@@ -19,7 +19,7 @@ local function makeVector2(value)
 	return value
 end
 
--- Creates a new Vector2 with the x and y components.
+--- Creates a new Vector2 with the x and y components.
 ---@param x number
 ---@param y number
 ---@return Vector2
@@ -33,7 +33,7 @@ function Vector2.new(x, y)
 	return self
 end
 
--- Creates a new Vector2 with x and y set to the value.
+--- Creates a new Vector2 with x and y set to the value.
 ---@param value number
 ---@return Vector2
 ---@nodiscard
@@ -50,7 +50,7 @@ function Vector2:Rotate(angle)
     return Vector2.new(self.X * cos - self.Y * sin, self.X * sin + self.Y * cos)
 end
 
--- Returns the dot product between this Vector2 and *other*.
+--- Returns the dot product between this Vector2 and *other*.
 ---@param other Vector2
 ---@return number
 ---@nodiscard
@@ -58,7 +58,7 @@ function Vector2:Dot(other)
     return self.X * other.X + self.Y * other.Y
 end
 
--- Returns a new Vector2 reflected against the passed *normal*.
+--- Returns a new Vector2 reflected against the passed *normal*.
 ---@param normal Vector2
 ---@return Vector2
 ---@nodiscard
@@ -66,7 +66,7 @@ function Vector2:Reflect(normal)
     return self - normal * 2 * self:Dot(normal)
 end
 
--- Returns a new Vector2 clamped between min and max.
+--- Returns a new Vector2 clamped between min and max.
 ---@param min Vector2
 ---@param max Vector2
 ---@return Vector2
@@ -78,7 +78,7 @@ function Vector2:Clamp(min, max)
 	)
 end
 
--- Returns a new Vector2 that is moved *distance* toward a *position*.
+--- Returns a new Vector2 that is moved *distance* toward a *position*.
 ---@param position Vector2
 ---@param distance number
 ---@return Vector2
@@ -87,14 +87,14 @@ function Vector2:MoveTowards(position, distance)
 	return self + (position - self):Unit() * distance
 end
 
--- Returns the magnitude (distance) of the vector.
+--- Returns the magnitude (distance) of the vector.
 ---@return number
 ---@nodiscard
 function Vector2:Magnitude()
 	return math.sqrt(self.X * self.X + self.Y * self.Y)
 end
 
--- Returns a new vector with the length of 1 (the unit vector).
+--- Returns a new vector with the length of 1 (the unit vector).
 ---@return Vector2
 ---@nodiscard
 function Vector2:Unit()

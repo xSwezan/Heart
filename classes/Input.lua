@@ -155,9 +155,9 @@ local connections = {
 	mouseMove = {};
 }
 
--- Passed  callback  gets  called when any of
--- the keycodes in  the  provided  table  get
--- pressed. Returns a disconnect function.
+--- Passed  callback  gets  called when any of
+--- the keycodes in  the  provided  table  get
+--- pressed. Returns a disconnect function.
 ---@param keyCodes KeyCode[]
 ---@param callback fun()
 ---@return fun()
@@ -179,9 +179,9 @@ function Input.InputDown(keyCodes, callback)
 	end
 end
 
--- Passed  callback  gets  called when any of
--- the keycodes in  the  provided  table  get
--- released. Returns a disconnect function.
+--- Passed  callback  gets  called when any of
+--- the keycodes in  the  provided  table  get
+--- released. Returns a disconnect function.
 ---@param keyCodes KeyCode[]
 ---@param callback fun()
 ---@return fun()
@@ -203,10 +203,10 @@ function Input.InputUp(keyCodes, callback)
 	end
 end
 
--- Passed callback gets called every time the
--- user presses the passed mouseButton,  with
--- the parameters: (clickPosition). Returns a
--- disconnect function.
+--- Passed callback gets called every time the
+--- user presses the passed mouseButton,  with
+--- the parameters: (clickPosition). Returns a
+--- disconnect function.
 ---@param mouseButton MouseButton
 ---@param callback fun(clickPosition: Vector2)
 ---@return fun()
@@ -223,10 +223,10 @@ function Input.MouseDown(mouseButton, callback)
 end
 
 
--- Passed callback gets called every time the
--- user releases the passed mouseButton, with
--- the parameters: (clickPosition). Returns a
--- disconnect function.
+--- Passed callback gets called every time the
+--- user releases the passed mouseButton, with
+--- the parameters: (clickPosition). Returns a
+--- disconnect function.
 ---@param mouseButton MouseButton
 ---@param callback fun(clickPosition: Vector2)
 ---@return fun()
@@ -242,10 +242,10 @@ function Input.MouseUp(mouseButton, callback)
 	end
 end
 
--- Passed callback gets called every time the
--- user double clicks the passed mouseButton,
--- with   the   parameters:  (clickPosition).
--- Returns a disconnect function.
+--- Passed callback gets called every time the
+--- user double clicks the passed mouseButton,
+--- with   the   parameters:  (clickPosition).
+--- Returns a disconnect function.
 ---@param mouseButton MouseButton
 ---@param callback fun(clickPosition: Vector2)
 ---@return fun()
@@ -261,10 +261,10 @@ function Input.MouseDoubleClick(mouseButton, callback)
 	end
 end
 
--- Passed callback gets called every time the
--- mouse moves, with the parameters:  (newPo-
--- sition,       delta).       Returns      a
--- disconnect function.
+--- Passed callback gets called every time the
+--- mouse moves, with the parameters:  (newPo-
+--- sition,       delta).       Returns      a
+--- disconnect function.
 ---@param callback fun(position: Vector2, delta: Vector2)
 ---@return fun()
 function Input.MouseMove(callback)
@@ -278,14 +278,14 @@ function Input.MouseMove(callback)
 	end
 end
 
--- Returns true if the passed KeyCode is down.
+--- Returns true if the passed KeyCode is down.
 ---@param keyCode KeyCode
 ---@return boolean
 function Input.IsDown(keyCode)
 	return (keyCodesDown[keyCode] == true) or (love.keyboard.isDown(keyCode --[[@as love.KeyConstant]]))
 end
 
--- Returns true if any of the passed KeyCodes are down.
+--- Returns true if any of the passed KeyCodes are down.
 ---@param keyCodes KeyCode[]
 ---@return boolean
 function Input.IsAnyDown(keyCodes)
@@ -298,7 +298,7 @@ function Input.IsAnyDown(keyCodes)
 	return false
 end
 
--- Returns true if all of the passed KeyCodes are down.
+--- Returns true if all of the passed KeyCodes are down.
 ---@param keyCodes KeyCode[]
 ---@return boolean
 function Input.AreAllDown(keyCodes)
