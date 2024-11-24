@@ -13,8 +13,11 @@
 
 local BASE = (...).."."
 
+require(BASE.."classes.SpriteSheet")
+require(BASE.."classes.Animation")
 require(BASE.."classes.Vector2")
 require(BASE.."classes.Canvas")
+require(BASE.."classes.Signal")
 require(BASE.."classes.Sprite")
 require(BASE.."classes.Spring")
 require(BASE.."classes.Shader")
@@ -30,8 +33,11 @@ require(BASE.."classes.Task")
 require(BASE.."util.math")
 require(BASE.."util.table")
 
+SpriteSheet = SpriteSheet
+Animation = Animation
 Vector2 = Vector2
 Canvas = Canvas
+Signal = Signal
 Sprite = Sprite
 Spring = Spring
 Shader = Shader
@@ -46,7 +52,8 @@ Task = Task
 
 Heart = {}
 
-function Heart:update(dt)
+function Heart.update(dt)
 	Task._update(dt)
 	Input._update(dt)
+	Animation._updateAll(dt)
 end

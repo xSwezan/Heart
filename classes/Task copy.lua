@@ -2,51 +2,48 @@
 
 Task = {}
 local tasks = {}
+local nextTaskId = 0
 
 local function addTask(callback, delay, args)
-    local co = coroutine.create(function()
-		callback(unpack(args))
-	end)
+    nextTaskId = nextTaskId + 1
 
     table.insert(tasks, {
-        co = co,
+        id = nextTaskId,
+        co = coroutine.create(function() callback(unpack(args)) end),
         delay = delay or 0,
         startTime = love.timer.getTime(),
         canceled = false
     })
 
-    return co
+    return nextTaskId
 end
 
 ---@param callback fun(...: any) Callback to spawn.
 ---@param ... any Paramaters to send to the callback.
----@return thread
 function Task.spawn(callback, ...)
-	print("YESS")
     return addTask(callback, 0, {...})
 end
 
 ---@param delay number The time to wait before spawning callback.
 ---@param callback fun(...: any) Callback to spawn.
 ---@param ... any Paramaters to send to the callback.
----@return thread
+---@return integer
 function Task.delay(delay, callback, ...)
     return addTask(callback, delay, {...})
 end
 
 ---@param seconds number? The time to yield for.
 function Task.wait(seconds)
-    -- local start = love.timer.getTime()
-    -- while (love.timer.getTime() - start < (seconds or 0)) do
-    --     coroutine.yield()
-    -- end
-	return love.timer.sleep(seconds or 0)
+    local start = love.timer.getTime()
+    while (love.timer.getTime() - start < (seconds or 0)) do
+        coroutine.yield()
+    end
 end
 
----@param thread thread The id of the task to cancel.
-function Task.cancel(thread)
-	for i = #tasks, 1, -1 do
-        if (tasks[i].co == thread) then
+---@param taskId integer The id of the task to cancel.
+function Task.cancel(taskId)
+    for i = #tasks, 1, -1 do
+        if (tasks[i].id == taskId) then
             tasks[i].canceled = true
             break
         end

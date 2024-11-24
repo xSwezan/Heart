@@ -1,3 +1,10 @@
-SpriteSheet - Takes in a SpriteSheet image and divides to a grid of quads.
-Animation
-AnimatedSprite [?]
+-> SpriteSheet - Takes in a SpriteSheet image and divides to a grid of quads.
+-> Animation
+-> Parent, Children
+-> Spring.GoalReached
+-> .anim files support + editor
+-> ParticleEmitter
+-> AnimatedSprite [?]
+-> 9Slice - https://github.com/wqferr/slicy
+
+-> Test whether Vector2's need to have a :Clone()

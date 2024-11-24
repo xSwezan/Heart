@@ -28,15 +28,14 @@ function Sprite.new(filename)
 	self.Color = Color.new(1, 1, 1, 1)
 
 	self:SetTexture(filename)
+	self.Size = Vector2.new(self.Texture:getWidth(), self.Texture:getHeight())
 
 	return self
 end
 
 ---@param filename string
 function Sprite:SetTexture(filename)
-	local Texture = love.graphics.newImage(filename)
-	self.Texture = Texture
-	self.Size = Vector2.new(Texture:getWidth(), Texture:getHeight())
+	self.Texture = love.graphics.newImage(filename)
 end
 
 --- Draws the Sprite to the screen.
