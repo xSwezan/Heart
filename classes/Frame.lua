@@ -53,8 +53,8 @@ function Frame:Draw()
 		love.graphics.rotate(math.rad(rotation))
 		love.graphics.rectangle(
 			"fill",
-			-size.X * self.AnchorPoint.X,
-			-size.Y * self.AnchorPoint.Y,
+			0,
+			0,
 			size.X,
 			size.Y,
 			self.CornerRadius,
@@ -67,8 +67,8 @@ function Frame:Draw()
 				love.graphics.setLineJoin(self.OutlineJoin)
 				love.graphics.rectangle(
 					"line",
-					-size.X * self.AnchorPoint.X,
-					-size.Y * self.AnchorPoint.Y,
+					0,
+					0,
 					size.X,
 					size.Y,
 					self.CornerRadius,
