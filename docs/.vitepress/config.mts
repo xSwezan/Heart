@@ -5,6 +5,7 @@ export default defineConfig({
   title: "Heart",
   description: "A Love2D Framework",
   ignoreDeadLinks: true,
+  base: "/Heart/",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
