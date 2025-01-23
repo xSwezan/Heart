@@ -7,7 +7,7 @@ hero:
   text: "A Roblox-style Love2D framework"
   tagline: A Roblox-style framework for Love2D
   image:
-    src: /icon.svg
+    src: public/icon.svg
     alt: Heart
   actions:
     - theme: brand
