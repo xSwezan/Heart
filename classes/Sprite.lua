@@ -3,6 +3,7 @@
 local BASE = (...):gsub("Sprite$", "")
 require(BASE.."Vector2")
 require(BASE.."Rect2D")
+require(BASE.."UDim2")
 require(BASE.."Color")
 
 ---@class Sprite: Rect2D
@@ -12,6 +13,7 @@ Sprite = {
 	ALIGN = Rect2D.ALIGN;
 }
 Sprite.__index = Sprite
+Sprite.__type = "Sprite"
 Sprite.__tostring = function()
 	return "Sprite"
 end
@@ -28,7 +30,7 @@ function Sprite.new(filename)
 	self.Color = Color.new(1, 1, 1, 1)
 
 	self:SetTexture(filename)
-	self.Size = Vector2.new(self.Texture:getWidth(), self.Texture:getHeight())
+	self.Size = UDim2.fromOffset(self.Texture:getWidth(), self.Texture:getHeight())
 
 	return self
 end
@@ -40,16 +42,20 @@ end
 
 --- Draws the Sprite to the screen.
 function Sprite:Draw()
+	local position = self:GetAbsolutePosition()
+	local size = self:GetAbsoluteSize()
+	local rotation = self:GetAbsoluteRotation()
+
 	self.Color:Use(function()
 		love.graphics.draw(
 			self.Texture,
-			self.Position.X,
-			self.Position.Y,
-			math.rad(self.Rotation),
-			self:GetAbsoluteSize().X / self.Texture:getWidth(),
-			self:GetAbsoluteSize().Y / self.Texture:getHeight(),
-			self.Texture:getWidth() * self.AnchorPoint.X,
-			self.Texture:getHeight() * self.AnchorPoint.Y
+			position.X,
+			position.Y,
+			math.rad(rotation),
+			size.X / self.Texture:getWidth(),
+			size.Y / self.Texture:getHeight(),
+			0,--self.Texture:getWidth() * self.AnchorPoint.X,
+			0--self.Texture:getHeight() * self.AnchorPoint.Y
 		)
 	end)
 end

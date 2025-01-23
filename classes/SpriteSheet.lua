@@ -71,6 +71,7 @@ end
 ---@class SpriteSheet
 SpriteSheet = {}
 SpriteSheet.__index = SpriteSheet
+SpriteSheet.__type = "SpriteSheet"
 SpriteSheet.__tostring = function()
     return "SpriteSheet"
 end

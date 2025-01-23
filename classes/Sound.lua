@@ -8,6 +8,7 @@
 ---@field Position number
 Sound = {}
 Sound.__index = Sound
+Sound.__type = "Sound"
 Sound.__tostring = function()
 	return "Sound"
 end

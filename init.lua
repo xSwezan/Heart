@@ -27,6 +27,8 @@ require(BASE.."classes.Label")
 require(BASE.."classes.Sound")
 require(BASE.."classes.Color")
 require(BASE.."classes.Input")
+require(BASE.."classes.UDim2")
+require(BASE.."classes.UDim")
 require(BASE.."classes.Font")
 require(BASE.."classes.Task")
 
@@ -47,13 +49,33 @@ Label = Label
 Sound = Sound
 Color = Color
 Input = Input
+UDim2 = UDim2
+UDim = UDim
 Font = Font
 Task = Task
 
 Heart = {}
 
+--- Updates Heart, required to make the library work as expected.
+---@param dt number
 function Heart.update(dt)
 	Task._update(dt)
 	Input._update(dt)
 	Animation._updateAll(dt)
+end
+
+--- Returns the Heart type of its only argument. If there is none; it returns type(value).
+---@param value any
+---@return string
+---@nodiscard
+function typeof(value)
+	local t = type(value)
+	if (t == "table") then
+		local classType = rawget(value, "__type") or value.__type
+		if (classType ~= nil) then
+			return classType
+		end
+	end
+
+	return t
 end

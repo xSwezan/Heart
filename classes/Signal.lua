@@ -4,6 +4,7 @@
 ---@class Signal
 Signal = {}
 Signal.__index = Signal
+Signal.__type = "Signal"
 Signal.__tostring = function()
 	return "Signal"
 end

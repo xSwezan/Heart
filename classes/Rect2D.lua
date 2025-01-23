@@ -1,11 +1,12 @@
 ---@meta
 
 ---@class Rect2D
+---@field Size UDim2
 ---@field Scale Vector2
----@field Size Vector2
----@field Position Vector2
+---@field Position UDim2
 ---@field Rotation number
 ---@field AnchorPoint Vector2
+---@field Parent Rect2D?
 Rect2D = {
 	ALIGN = {
 		TOP_LEFT = Vector2.new(0, 0);
@@ -22,6 +23,7 @@ Rect2D = {
 	};
 }
 Rect2D.__index = Rect2D
+Rect2D.__type = "Rect2D"
 Rect2D.__tostring = function()
 	return "Rect2D"
 end
@@ -31,10 +33,11 @@ end
 function Rect2D.new()
 	local self = setmetatable({
 		Scale = Vector2.new(1, 1);
-		Size = Vector2.new(100, 100);
-		Position = Vector2.new(0, 0);
+		Size = UDim2.fromOffset(100, 100);
+		Position = UDim2.new();
 		Rotation = 0;
 		AnchorPoint = Rect2D.ALIGN.CENTER;
+		Parent = nil;
 	}, Rect2D)
 
 	return self
@@ -51,24 +54,80 @@ end
 ---@return Vector2
 ---@nodiscard
 function Rect2D:GetCenter()
-    return self.Position - (self.Size * self.Scale * (self.AnchorPoint - 0.5)):Rotate(math.rad(self.Rotation))
+    return self:GetAbsolutePosition() + (self:GetAbsoluteSize() * 0.5):Rotate(math.rad(self:GetAbsoluteRotation()))
 end
 
 --- Returns the size in pixels.
 ---@return Vector2
 ---@nodiscard
 function Rect2D:GetAbsoluteSize()
-	return self.Size * self.Scale
+	local parentSize --[[@as Vector2]]
+	if (self.Parent) then
+		parentSize = self.Parent:GetAbsoluteSize()
+	else
+		local screenWidth, screenHeight = love.window.getMode()
+		parentSize = Vector2.new(screenWidth, screenHeight)
+	end
+
+	local scale = self.Scale
+
+	return Vector2.new(
+		(parentSize.X * self.Size.X.Scale + self.Size.X.Offset) * scale.X,
+		(parentSize.Y * self.Size.Y.Scale + self.Size.Y.Offset) * scale.Y
+	)
+end
+
+---@return Vector2
+---@nodiscard
+function Rect2D:GetAbsolutePosition()
+	local parentPosition --[[@as Vector2]]
+	local parentSize --[[@as Vector2]]
+	local parentRotation = 0
+
+	if (self.Parent) then
+		parentPosition = self.Parent:GetAbsolutePosition()
+		parentSize = self.Parent:GetAbsoluteSize()
+		parentRotation = self.Parent:GetAbsoluteRotation()
+	else
+		parentPosition = Vector2.new(0, 0)
+
+		local screenWidth, screenHeight = love.window.getMode()
+		parentSize = Vector2.new(screenWidth, screenHeight)
+	end
+
+	local size = self:GetAbsoluteSize()
+	local position = self.Position
+	local rotation = self:GetAbsoluteRotation()
+
+	local localPosition = Vector2.new(
+		(parentSize.X * position.X.Scale + position.X.Offset),
+		(parentSize.Y * position.Y.Scale + position.Y.Offset)
+	):Rotate(math.rad(parentRotation))
+
+	return parentPosition + localPosition - (size * self.AnchorPoint):Rotate(math.rad(rotation))
+end
+
+--- Returns the absolute rotation in degrees.
+---@return number
+---@nodiscard
+function Rect2D:GetAbsoluteRotation()
+	local parentRotation = 0
+	if (self.Parent) then
+		parentRotation = self.Parent:GetAbsoluteRotation()
+	end
+
+	return self.Rotation + parentRotation
 end
 
 --- Returns a table of the four corners as Vector2s.
 ---@return Vector2[]
 ---@nodiscard
 function Rect2D:GetCorners()
-    local halfWidth = (self.Size.X * self.Scale.X) / 2
-    local halfHeight = (self.Size.Y * self.Scale.Y) / 2
+	local size = self:GetAbsoluteSize()
+    local halfWidth = size.X / 2
+    local halfHeight = size.Y / 2
 
-	local center = self:GetCenter();
+	local center = self:GetCenter()
 
     local corners = {
         Vector2.new(-halfWidth, -halfHeight),
@@ -79,7 +138,7 @@ function Rect2D:GetCorners()
 
     local rotatedCorners = {}
     for _, corner in ipairs(corners) do
-        local rotated = corner:Rotate(math.rad(self.Rotation))
+        local rotated = corner:Rotate(math.rad(self:GetAbsoluteRotation()))
 
         table.insert(rotatedCorners,
 			center + rotated
@@ -142,20 +201,24 @@ end
 
 --- Utility function that draws the bounds of the Rect2D.
 function Rect2D:DebugDrawBounds()
+	local position = self:GetAbsolutePosition()
+	local size = self:GetAbsoluteSize()
+	local rotation = self:GetAbsoluteRotation()
+
 	love.graphics.push()
 	love.graphics.setColor(1, 0, 1, 0.5)
 	love.graphics.translate(
-		self.Position.X,
-		self.Position.Y
+		position.X,
+		position.Y
 	)
 
-	love.graphics.rotate(math.rad(self.Rotation))
+	love.graphics.rotate(math.rad(rotation))
 	love.graphics.rectangle(
 		"fill",
-		-self:GetAbsoluteSize().X * self.AnchorPoint.X,
-		-self:GetAbsoluteSize().Y * self.AnchorPoint.Y,
-		self:GetAbsoluteSize().X,
-		self:GetAbsoluteSize().Y
+		0,---size.X * self.AnchorPoint.X,
+		0,---size.Y * self.AnchorPoint.Y,
+		size.X,
+		size.Y
 	)
 	love.graphics.setColor(1, 1, 1)
 	love.graphics.pop()
@@ -163,12 +226,18 @@ end
 
 --- Utility function that draws the AnchorPoint of the Rect2D.
 function Rect2D:DebugDrawAnchorPoint()
+	local position = self:GetAbsolutePosition()
+	local size = self:GetAbsoluteSize()
+	local rotation = self:GetAbsoluteRotation()
+
+	local finalPosition = position + (size * self.AnchorPoint):Rotate(math.rad(rotation))
+
 	love.graphics.push()
 	love.graphics.setColor(1, 1, 0, 1)
 	love.graphics.circle(
 		"fill",
-		self.Position.X,
-		self.Position.Y,
+		finalPosition.X,
+		finalPosition.Y,
 		3
 	)
 	love.graphics.setColor(1, 1, 1)

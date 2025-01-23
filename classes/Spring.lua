@@ -11,6 +11,7 @@
 ---@field Clock function
 Spring = {}
 Spring.__index = Spring
+Spring.__type = "Spring"
 Spring.__tostring = function()
 	return "Spring"
 end

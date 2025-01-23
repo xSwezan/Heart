@@ -5,6 +5,7 @@
 ---@field ClearColor Color
 Canvas = {}
 Canvas.__index = Canvas
+Canvas.__type = "Canvas"
 Canvas.__tostring = function()
 	return "Canvas"
 end

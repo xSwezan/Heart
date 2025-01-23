@@ -6,6 +6,7 @@
 ---@field private _data string
 Font = {}
 Font.__index = Font
+Font.__type = "Font"
 Font.__tostring = function()
 	return "Font"
 end

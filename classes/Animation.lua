@@ -108,6 +108,7 @@ end
 ---@field FrameChanged Signal Fired whenever the frame changes.
 Animation = {}
 Animation.__index = Animation
+Animation.__type = "Animation"
 Animation.__tostring = function()
     return "Animation"
 end
@@ -204,15 +205,19 @@ end
 --- Draws anim8 animation using a sprite.
 ---@param sprite Sprite
 function Animation:Draw(sprite)
+	local size = sprite:GetAbsoluteSize()
+	local position = sprite:GetAbsolutePosition()
+	local rotation = sprite:GetAbsoluteRotation()
+
     sprite.Color:Use(function()
 		love.graphics.draw(
 			sprite.Texture,
             self._frames[self._frameIndex],
-			sprite.Position.X,
-			sprite.Position.Y,
-			math.rad(sprite.Rotation),
-			sprite:GetAbsoluteSize().X / sprite.Size.X, ---! All these sprite.Size are suppossed(?) to be sprite.Texture:getWidth() and sprite.Texture:getHeight()
-			sprite:GetAbsoluteSize().Y / sprite.Size.Y, ---! All these sprite.Size are suppossed(?) to be sprite.Texture:getWidth() and sprite.Texture:getHeight()
+			position.X,
+			position.Y,
+			math.rad(rotation),
+			size.X / sprite.Size.X, ---! All these sprite.Size are suppossed(?) to be sprite.Texture:getWidth() and sprite.Texture:getHeight()
+			size.Y / sprite.Size.Y, ---! All these sprite.Size are suppossed(?) to be sprite.Texture:getWidth() and sprite.Texture:getHeight()
 			sprite.Size.X * sprite.AnchorPoint.X, ---! All these sprite.Size are suppossed(?) to be sprite.Texture:getWidth() and sprite.Texture:getHeight()
 			sprite.Size.Y * sprite.AnchorPoint.Y ---! All these sprite.Size are suppossed(?) to be sprite.Texture:getWidth() and sprite.Texture:getHeight()
 		)

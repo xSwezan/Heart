@@ -16,6 +16,7 @@ Frame = {
 	};
 }
 Frame.__index = Frame
+Frame.__type = "Frame"
 Frame.__tostring = function()
 	return "Frame"
 end
@@ -39,19 +40,23 @@ end
 
 --- Draws the Frame to the screen.
 function Frame:Draw()
+	local position = self:GetAbsolutePosition()
+	local size = self:GetAbsoluteSize()
+	local rotation = self:GetAbsoluteRotation()
+
 	self.Color:Use(function()
 		love.graphics.push()
 		love.graphics.translate(
-			self.Position.X,
-			self.Position.Y
+			position.X,
+			position.Y
 		)
-		love.graphics.rotate(math.rad(self.Rotation))
+		love.graphics.rotate(math.rad(rotation))
 		love.graphics.rectangle(
 			"fill",
-			-self:GetAbsoluteSize().X * self.AnchorPoint.X,
-			-self:GetAbsoluteSize().Y * self.AnchorPoint.Y,
-			self:GetAbsoluteSize().X,
-			self:GetAbsoluteSize().Y,
+			-size.X * self.AnchorPoint.X,
+			-size.Y * self.AnchorPoint.Y,
+			size.X,
+			size.Y,
 			self.CornerRadius,
 			self.CornerRadius
 		)
@@ -62,10 +67,10 @@ function Frame:Draw()
 				love.graphics.setLineJoin(self.OutlineJoin)
 				love.graphics.rectangle(
 					"line",
-					-self:GetAbsoluteSize().X * self.AnchorPoint.X,
-					-self:GetAbsoluteSize().Y * self.AnchorPoint.Y,
-					self:GetAbsoluteSize().X,
-					self:GetAbsoluteSize().Y,
+					-size.X * self.AnchorPoint.X,
+					-size.Y * self.AnchorPoint.Y,
+					size.X,
+					size.Y,
 					self.CornerRadius,
 					self.CornerRadius
 				)

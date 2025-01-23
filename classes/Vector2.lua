@@ -10,6 +10,7 @@
 ---@operator unm(Vector2 | number): Vector2
 Vector2 = {}
 Vector2.__index = Vector2
+Vector2.__type = "Vector2"
 
 local function makeVector2(value)
 	if (type(value) == "number") then
@@ -20,14 +21,14 @@ local function makeVector2(value)
 end
 
 --- Creates a new Vector2 with the x and y components.
----@param x number
----@param y number
+---@param x number?
+---@param y number?
 ---@return Vector2
 ---@nodiscard
 function Vector2.new(x, y)
 	local self = setmetatable({
-		X = x;
-		Y = y;
+		X = x or 0;
+		Y = y or 0;
 	}, Vector2)
 
 	return self
@@ -45,6 +46,10 @@ end
 ---@return Vector2
 ---@nodiscard
 function Vector2:Rotate(angle)
+	if (angle == 0) then
+		return Vector2.new(self.X, self.Y)
+	end
+
     local cos = math.cos(angle)
     local sin = math.sin(angle)
     return Vector2.new(self.X * cos - self.Y * sin, self.X * sin + self.Y * cos)
@@ -130,5 +135,5 @@ function Vector2:__unm()
 end
 
 function Vector2:__tostring()
-	return "Vector2(" .. self.X .. ", " .. self.Y .. ")"
+	return string.format("Vector2(%d, %d)", self.X, self.Y)
 end

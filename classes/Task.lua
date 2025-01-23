@@ -22,7 +22,6 @@ end
 ---@param ... any Paramaters to send to the callback.
 ---@return thread
 function Task.spawn(callback, ...)
-	print("YESS")
     return addTask(callback, 0, {...})
 end
 

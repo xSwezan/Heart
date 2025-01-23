@@ -4,6 +4,7 @@
 ---@field Shader love.Shader
 Shader = {}
 Shader.__index = Shader
+Shader.__type = "Shader"
 Shader.__tostring = function()
 	return "Shader"
 end
