@@ -91,13 +91,13 @@ export default defineConfig({
         ]
       }
     ],
-    logo: '/icon.svg',
+    logo: 'public/icon.svg',
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/xSwezan/Heart' }
     ]
   },
   head: [
-    ['link', { rel: 'icon', href: '/icon.svg' }]
+    ['link', { rel: 'icon', href: 'public/icon.svg' }]
   ]
 })
