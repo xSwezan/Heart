@@ -311,6 +311,14 @@ function Input.AreAllDown(keyCodes)
 	return true
 end
 
+--- Returns mouse position as a Vector2
+---@return Vector2
+---@nodiscard
+function Input.GetMousePosition()
+	local x, y = love.mouse.getPosition()
+	return Vector2.new(x, y)
+end
+
 ---@param dt number DeltaTime
 ---@private
 function Input._update(dt)
