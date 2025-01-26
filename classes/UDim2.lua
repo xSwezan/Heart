@@ -67,6 +67,13 @@ function UDim2:Lerp(goal, alpha)
 	)
 end
 
+--- Returns a copy of the UDim2.
+---@return UDim2
+---@nodiscard
+function UDim2:Copy()
+	return UDim2.new(self.X.Scale, self.X.Offset, self.Y.Scale, self.Y.Offset)
+end
+
 function UDim2.__add(rhs, lhs)
 	return UDim2.new(
 		rhs.X.Scale + lhs.X.Scale,

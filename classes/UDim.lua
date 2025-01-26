@@ -40,6 +40,13 @@ function UDim.fromOffset(offset)
 	return UDim.new(0, offset or 0)
 end
 
+--- Returns a copy of the UDim.
+---@return UDim
+---@nodiscard
+function UDim:Copy()
+	return UDim.new(self.Scale, self.Offset)
+end
+
 function UDim.__add(rhs, lhs)
 	return UDim.new(rhs.Scale + lhs.Scale, rhs.Offset + lhs.Offset)
 end

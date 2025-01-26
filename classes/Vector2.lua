@@ -106,6 +106,13 @@ function Vector2:Unit()
 	return self / self:Magnitude()
 end
 
+--- Returns a new copy of the Vector2.
+---@return Vector2
+---@nodiscard
+function Vector2:Copy()
+	return Vector2.new(self.X, self.Y)
+end
+
 function Vector2.__add(rhs, lhs)
 	rhs = makeVector2(rhs)
 	lhs = makeVector2(lhs)

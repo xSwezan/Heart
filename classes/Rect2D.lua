@@ -6,6 +6,7 @@
 ---@field Position UDim2
 ---@field Rotation number
 ---@field AnchorPoint Vector2
+---@field Padding Padding
 ---@field Parent Rect2D?
 Rect2D = {
 	ALIGN = {
@@ -37,6 +38,7 @@ function Rect2D.new()
 		Position = UDim2.new();
 		Rotation = 0;
 		AnchorPoint = Rect2D.ALIGN.CENTER;
+		Padding = Padding.new();
 		Parent = nil;
 	}, Rect2D)
 
@@ -57,13 +59,13 @@ function Rect2D:GetCenter()
     return self:GetAbsolutePosition() + (self:GetAbsoluteSize() * 0.5):Rotate(math.rad(self:GetAbsoluteRotation()))
 end
 
---- Returns the size in pixels.
+--- Returns the absolute size in pixels.
 ---@return Vector2
 ---@nodiscard
 function Rect2D:GetAbsoluteSize()
 	local parentSize --[[@as Vector2]]
 	if (self.Parent) then
-		parentSize = self.Parent:GetAbsoluteSize()
+		parentSize = self.Parent:GetAbsoluteContentSize()
 	else
 		local screenWidth, screenHeight = love.window.getMode()
 		parentSize = Vector2.new(screenWidth, screenHeight)
@@ -77,6 +79,7 @@ function Rect2D:GetAbsoluteSize()
 	)
 end
 
+--- Returns the absolute position in pixels.
 ---@return Vector2
 ---@nodiscard
 function Rect2D:GetAbsolutePosition()
@@ -85,9 +88,9 @@ function Rect2D:GetAbsolutePosition()
 	local parentRotation = 0
 
 	if (self.Parent) then
-		parentPosition = self.Parent:GetAbsolutePosition()
-		parentSize = self.Parent:GetAbsoluteSize()
-		parentRotation = self.Parent:GetAbsoluteRotation()
+		parentPosition = self.Parent:GetAbsoluteContentPosition()
+		parentSize = self.Parent:GetAbsoluteContentSize()
+		parentRotation = self.Parent:GetAbsoluteContentRotation()
 	else
 		parentPosition = Vector2.new(0, 0)
 
@@ -113,10 +116,76 @@ end
 function Rect2D:GetAbsoluteRotation()
 	local parentRotation = 0
 	if (self.Parent) then
-		parentRotation = self.Parent:GetAbsoluteRotation()
+		parentRotation = self.Parent:GetAbsoluteContentRotation()
 	end
 
 	return self.Rotation + parentRotation
+end
+
+--- Returns the absolute padding size in pixels.
+---@return integer top, integer bottom, integer left, integer right
+---@nodiscard
+function Rect2D:GetAbsolutePadding()
+	local size = self:GetAbsoluteSize()
+	local padding = self.Padding
+
+	return
+		math.max(0, padding.Top.Scale * size.Y + padding.Top.Offset),
+		math.max(0, padding.Bottom.Scale * size.Y + padding.Bottom.Offset),
+		math.max(0, padding.Left.Scale * size.X + padding.Left.Offset),
+		math.max(0, padding.Right.Scale * size.X + padding.Right.Offset)
+end
+
+--- Returns the absolute content size in pixels.
+---@return Vector2
+---@nodiscard
+function Rect2D:GetAbsoluteContentSize()
+	local size = self:GetAbsoluteSize()
+	local top, bottom, left, right = self:GetAbsolutePadding()
+
+	return Vector2.new(
+		math.max(0, size.X - left - right),
+		math.max(0, size.Y - top - bottom)
+	)
+end
+
+---@return Vector2
+---@nodiscard
+function Rect2D:GetAbsoluteContentPosition() ---! Maybe change this to use GetAbsolutePosition() instead of copying everything
+	local parentPosition --[[@as Vector2]]
+	local parentSize --[[@as Vector2]]
+	local parentRotation = 0
+
+	if (self.Parent) then
+		parentPosition = self.Parent:GetAbsoluteContentPosition()
+		parentSize = self.Parent:GetAbsoluteContentSize()
+		parentRotation = self.Parent:GetAbsoluteContentRotation()
+	else
+		parentPosition = Vector2.new(0, 0)
+
+		local screenWidth, screenHeight = love.window.getMode()
+		parentSize = Vector2.new(screenWidth, screenHeight)
+	end
+
+	local size = self:GetAbsoluteSize()
+	local position = self.Position
+	local rotation = self:GetAbsoluteRotation()
+
+	local top, bottom, left, right = self:GetAbsolutePadding()
+
+	local localPosition = Vector2.new(
+		(parentSize.X * position.X.Scale + position.X.Offset),
+		(parentSize.Y * position.Y.Scale + position.Y.Offset)
+	):Rotate(math.rad(parentRotation))
+
+	return parentPosition + localPosition - (size * self.AnchorPoint - Vector2.new(left, top)):Rotate(math.rad(rotation))
+end
+
+--- Returns the absolute content rotation in degrees.
+---@return number
+---@nodiscard
+function Rect2D:GetAbsoluteContentRotation()
+	return self:GetAbsoluteRotation()
 end
 
 --- Returns a table of the four corners as Vector2s.
@@ -207,6 +276,31 @@ function Rect2D:DebugDrawBounds()
 
 	love.graphics.push()
 	love.graphics.setColor(1, 0, 1, 0.5)
+	love.graphics.translate(
+		position.X,
+		position.Y
+	)
+
+	love.graphics.rotate(math.rad(rotation))
+	love.graphics.rectangle(
+		"fill",
+		0,---size.X * self.AnchorPoint.X,
+		0,---size.Y * self.AnchorPoint.Y,
+		size.X,
+		size.Y
+	)
+	love.graphics.setColor(1, 1, 1)
+	love.graphics.pop()
+end
+
+--- Utility function that draws the bounds of the Rect2D.
+function Rect2D:DebugDrawContentBounds()
+	local position = self:GetAbsoluteContentPosition()
+	local size = self:GetAbsoluteContentSize()
+	local rotation = self:GetAbsoluteContentRotation()
+
+	love.graphics.push()
+	love.graphics.setColor(0, 1, 0, 0.5)
 	love.graphics.translate(
 		position.X,
 		position.Y

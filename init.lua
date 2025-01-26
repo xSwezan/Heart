@@ -16,6 +16,7 @@ local BASE = (...).."."
 require(BASE.."classes.SpriteSheet")
 require(BASE.."classes.Animation")
 require(BASE.."classes.Vector2")
+require(BASE.."classes.Padding")
 require(BASE.."classes.Canvas")
 require(BASE.."classes.Signal")
 require(BASE.."classes.Sprite")
@@ -38,6 +39,7 @@ require(BASE.."util.table")
 SpriteSheet = SpriteSheet
 Animation = Animation
 Vector2 = Vector2
+Padding = Padding
 Canvas = Canvas
 Signal = Signal
 Sprite = Sprite

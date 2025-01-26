@@ -25,7 +25,7 @@ setmetatable(Label, Rect2D)
 
 local function updateSize(self)
 	local font = love.graphics.getFont()
-	self.Size = UDim2.fromOffset(font:getWidth(self.Text), font:getBaseline())
+	self.Size = UDim2.fromOffset(font:getWidth(self.Text), font:getBaseline()) ---! Maybe make this a setting
 end
 
 
